@@ -1,4 +1,5 @@
-use std::convert::TryFrom;
+use alloc::string::{String, ToString};
+use core::convert::TryFrom;
 
 use num::{NumCast, One, Zero};
 #[cfg(feature = "use-mpfr")]

@@ -1,8 +1,11 @@
-use std::cmp::Ordering;
-use std::collections::HashMap;
-use std::fmt::Debug;
-use std::ops::{BitAnd, BitOr, Shl, Shr, Sub};
+use alloc::{string::String, vec::Vec};
+use core::{
+    cmp::Ordering,
+    fmt::Debug,
+    ops::{BitAnd, BitOr, Shl, Shr, Sub},
+};
 
+use hashbrown::HashMap;
 use num::{One, Zero};
 
 use crate::domains::Bounds;

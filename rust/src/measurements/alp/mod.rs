@@ -158,7 +158,7 @@ where
 // Estimate the value of an entry based on its noisy bitrepresentation. This is Algorithm 3 in the paper
 fn estimate_unary<T>(v: &Vec<bool>) -> T
 where
-    T: num::Float,
+    T: num::traits::Float,
 {
     let mut prefix_sum = Vec::with_capacity(v.len() + 1usize);
     prefix_sum.push(0);
@@ -181,7 +181,7 @@ where
 // This is Algorithm 5 in the paper
 fn compute_estimate<K, T>(state: &AlpState<K, T>, key: &K) -> T
 where
-    T: num::Float,
+    T: num::traits::Float,
 {
     let v = state
         .h
@@ -217,7 +217,7 @@ pub fn make_base_alp_with_hashers<K, C, T>(
 where
     K: 'static + Eq + Hash + CheckAtom,
     C: 'static + Clone + Integer + CheckAtom + DistanceConstant<C> + ToPrimitive,
-    T: 'static + num::Float + DistanceConstant<T> + InfCast<Float> + InfCast<C>,
+    T: 'static + num::traits::Float + DistanceConstant<T> + InfCast<Float> + InfCast<C>,
     Float: InfCast<T>,
     (SparseDomain<K, C>, L1Distance<C>): MetricSpace,
 {
@@ -284,7 +284,7 @@ pub fn make_base_alp<K, C, T>(
 where
     K: 'static + Eq + Hash + Clone + CheckAtom,
     C: 'static + Clone + Integer + CheckAtom + DistanceConstant<C> + InfCast<T> + ToPrimitive,
-    T: 'static + num::Float + DistanceConstant<T> + InfCast<Float> + InfCast<C>,
+    T: 'static + num::traits::Float + DistanceConstant<T> + InfCast<Float> + InfCast<C>,
     Float: InfCast<T>,
     (SparseDomain<K, C>, L1Distance<C>): MetricSpace,
 {

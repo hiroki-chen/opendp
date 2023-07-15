@@ -1,5 +1,5 @@
+use core::convert::TryFrom;
 use num::One;
-use std::convert::TryFrom;
 
 // stands for Big Integer, an integer with unlimited precision, from gmp
 use rug::{Integer, Rational};

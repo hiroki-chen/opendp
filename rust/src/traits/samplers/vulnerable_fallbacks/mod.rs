@@ -8,7 +8,7 @@ pub trait SampleDiscreteLaplaceZ2k: Sized {
 
 impl<T> SampleDiscreteLaplaceZ2k for T
 where
-    T: num::Float + SampleUniform,
+    T: num::traits::Float + SampleUniform,
 {
     fn sample_discrete_laplace_Z2k(shift: Self, scale: Self, _k: i32) -> Fallible<Self> {
         let u = loop {
@@ -32,14 +32,17 @@ pub trait SampleDiscreteGaussianZ2k: Sized {
 impl SampleDiscreteGaussianZ2k for f64 {
     fn sample_discrete_gaussian_Z2k(shift: Self, scale: Self, _k: i32) -> Fallible<Self> {
         let uniform_sample = f64::sample_standard_uniform(false)?;
-        Ok(shift + scale * std::f64::consts::SQRT_2 * erf::erfc_inv(2.0 * uniform_sample))
+        Ok(shift + scale * core::f64::consts::SQRT_2 * erf::erfc_inv(2.0 * uniform_sample))
     }
 }
 
 impl SampleDiscreteGaussianZ2k for f32 {
     fn sample_discrete_gaussian_Z2k(shift: Self, scale: Self, _k: i32) -> Fallible<Self> {
         let uniform_sample = f64::sample_standard_uniform(false)?;
-        Ok(shift + scale * std::f32::consts::SQRT_2 * (erf::erfc_inv(2.0 * uniform_sample) as f32))
+        Ok(
+            shift
+                + scale * core::f32::consts::SQRT_2 * (erf::erfc_inv(2.0 * uniform_sample) as f32),
+        )
     }
 }
 

@@ -14,8 +14,9 @@
 #[cfg(feature = "ffi")]
 mod ffi;
 
-use std::hash::Hash;
-use std::marker::PhantomData;
+use alloc::string::String;
+use core::hash::Hash;
+use core::marker::PhantomData;
 
 use crate::{
     core::{Domain, Metric, MetricSpace},
@@ -24,7 +25,7 @@ use crate::{
 };
 #[cfg(feature = "contrib")]
 use crate::{traits::Hashable, transformations::DataFrameDomain};
-use std::fmt::{Debug, Formatter};
+use core::fmt::{Debug, Formatter};
 
 /// The type that represents the distance between datasets.
 /// It is used as the associated [`Metric`]::Distance type for e.g. [`SymmetricDistance`], [`InsertDeleteDistance`], etc.
@@ -70,7 +71,7 @@ impl PartialEq for SymmetricDistance {
     }
 }
 impl Debug for SymmetricDistance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "SymmetricDistance()")
     }
 }
@@ -140,7 +141,7 @@ impl PartialEq for InsertDeleteDistance {
     }
 }
 impl Debug for InsertDeleteDistance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "InsertDeleteDistance()")
     }
 }
@@ -212,7 +213,7 @@ impl PartialEq for ChangeOneDistance {
     }
 }
 impl Debug for ChangeOneDistance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "ChangeOneDistance()")
     }
 }
@@ -272,7 +273,7 @@ impl PartialEq for HammingDistance {
     }
 }
 impl Debug for HammingDistance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "HammingDistance()")
     }
 }
@@ -324,7 +325,7 @@ impl<const P: usize, Q> PartialEq for LpDistance<P, Q> {
     }
 }
 impl<const P: usize, Q> Debug for LpDistance<P, Q> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "L{}Distance({})", P, type_name!(Q))
     }
 }
@@ -392,7 +393,7 @@ impl<Q> PartialEq for AbsoluteDistance<Q> {
     }
 }
 impl<Q> Debug for AbsoluteDistance<Q> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "AbsoluteDistance({})", type_name!(Q))
     }
 }
@@ -441,7 +442,7 @@ impl PartialEq for DiscreteDistance {
     }
 }
 impl Debug for DiscreteDistance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "DiscreteDistance()")
     }
 }

@@ -3,15 +3,15 @@
 #[cfg(feature = "ffi")]
 mod ffi;
 
-use std::f64::consts::SQRT_2;
+use core::f64::consts::SQRT_2;
 
-use num::{Float, One, Zero};
+use num::{traits::Float, One, Zero};
 use opendp_derive::bootstrap;
 use statrs::function::erf::erf_inv;
 
 use crate::error::Fallible;
 use crate::traits::InfCast;
-use std::fmt::Debug;
+use core::fmt::Debug;
 
 #[bootstrap(arguments(scale(c_type = "void *"), alpha(c_type = "void *")))]
 /// Convert a Laplacian scale into an accuracy estimate (tolerance) at a statistical significance level `alpha`.
@@ -573,12 +573,11 @@ pub mod test {
         // let scale = 12.503562372734077;
 
         println!("scale: {}", scale);
-        let base_dg =
-            make_base_discrete_gaussian::<_, ZeroConcentratedDivergence<f64>, i32>(
-                AtomDomain::<i8>::default(),
-                AbsoluteDistance::default(),  
-                scale,
-            )?;
+        let base_dg = make_base_discrete_gaussian::<_, ZeroConcentratedDivergence<f64>, i32>(
+            AtomDomain::<i8>::default(),
+            AbsoluteDistance::default(),
+            scale,
+        )?;
         let n = 50_000;
         let empirical_alpha = (0..n)
             .filter(|_| base_dg.invoke(&0).unwrap_test().clamp(-127, 127).abs() >= accuracy)

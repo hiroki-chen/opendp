@@ -1,6 +1,8 @@
 //! Traits for sampling from probability distributions.
 
 mod bernoulli;
+use core::num::NonZeroU32;
+
 pub use bernoulli::*;
 
 #[cfg(feature = "use-mpfr")]
@@ -25,6 +27,7 @@ mod vulnerable_fallbacks;
 #[cfg(not(feature = "use-mpfr"))]
 pub use vulnerable_fallbacks::*;
 
+use alloc::vec::Vec;
 use rand::prelude::SliceRandom;
 use rand::RngCore;
 #[cfg(feature = "use-mpfr")]
@@ -109,7 +112,7 @@ impl RngCore for GeneratorOpenDP {
     }
 
     fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), rand::Error> {
-        fill_bytes(dest).map_err(rand::Error::new)
+        fill_bytes(dest).map_err(|_| rand::Error::from(NonZeroU32::new(1).unwrap()))
     }
 }
 

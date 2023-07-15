@@ -3,11 +3,12 @@
 #[cfg(feature = "ffi")]
 mod ffi;
 
+use alloc::{boxed::Box, vec::Vec};
+use core::{any::Any, fmt::Debug};
+
 use crate::domains::type_name;
 use crate::error::*;
 use crate::traits::CheckNull;
-use std::any::Any;
-use std::fmt::Debug;
 
 pub trait IsVec: Debug {
     // Not sure if we need into_any() (which consumes the Form), keeping it for now.

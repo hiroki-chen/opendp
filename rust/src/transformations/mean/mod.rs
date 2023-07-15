@@ -1,7 +1,7 @@
 #[cfg(feature = "ffi")]
 mod ffi;
 
-use num::Float;
+use num::traits::Float;
 use opendp_derive::bootstrap;
 
 use crate::core::{Metric, MetricSpace, Transformation};
@@ -14,10 +14,7 @@ use super::{
     make_lipschitz_float_mul, make_sum, LipschitzMulFloatDomain, LipschitzMulFloatMetric, MakeSum,
 };
 
-#[bootstrap(
-    features("contrib"),
-    generics(MI(suppress), T(suppress))
-)]
+#[bootstrap(features("contrib"), generics(MI(suppress), T(suppress)))]
 /// Make a Transformation that computes the mean of bounded data.
 ///
 /// This uses a restricted-sensitivity proof that takes advantage of known dataset size.

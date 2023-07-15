@@ -6,7 +6,7 @@ homepage = "https://opendp.org/"
 repository = "https://github.com/opendp/opendp"
 authors = ["The OpenDP Project <info@opendp.org>"]
 edition = "2021"
-rust-version = "1.64.0" # MSRV via `cargo intall msrv && cargo msrv -- cargo check --features=untrusted,bindings-python`
+rust-version = "1.64.0"                            # MSRV via `cargo intall msrv && cargo msrv -- cargo check --features=untrusted,bindings-python`
 
 [workspace]
 members = [".", "opendp_derive", "opendp_tooling"]
@@ -33,19 +33,28 @@ exclude = ["windows/*"]
 
 [dependencies]
 opendp_derive = { path = "opendp_derive" }
-rand = "0.7.3"
-num = "0.3.1"
-thiserror = "1.0.24"
-statrs = "0.13.0"
-rug = { version = "1.14.0", default-features = false, features = ["integer", "float", "rational", "num-traits", "rand"], optional = true }
+rand = { version = "0.7.3", default-features = false, features = ["alloc"] }
+num = { version = "0.3.1", default-features = false }
+statrs = { git = "https://github.com/hiroki-chen/statrs" }
+rug = { version = "1.14.0", default-features = false, features = [
+    "integer",
+    "float",
+    "rational",
+    "num-traits",
+    "rand",
+], optional = true }
 az = { version = "1.2.0", optional = true }
-gmp-mpfr-sys = { version = "1.4.7", default-features = false, features = ["mpfr", "force-cross"], optional = true }
+gmp-mpfr-sys = { version = "1.4.7", default-features = false, features = [
+    "mpfr",
+    "force-cross",
+], optional = true }
 openssl = { version = "0.10.29", features = ["vendored"], optional = true }
 opendp_tooling = { path = "opendp_tooling", optional = true }
 readonly = "0.2"
 
-lazy_static = { version = "1.4.0", optional = true }
+lazy_static = { version = "1.4.0", optional = true, features = ["spin_no_std"] }
 vega_lite_4 = { version = "0.6.0", optional = true }
+hashbrown = { version = "0.14.0", features = ["serde"] }
 
 [build-dependencies]
 opendp_tooling = { path = "opendp_tooling", optional = true }
@@ -87,10 +96,11 @@ crate-type = ["rlib", "cdylib"]
 features = ["derive", "untrusted", "ffi"]
 rustdoc-args = [
     # so that latex renders
-    "--html-in-header", "katex.html",
-    
+    "--html-in-header",
+    "katex.html",
+
     # so that proof documents are visible
-    "--document-private-items"
+    "--document-private-items",
 ]
 
 [[bench]]

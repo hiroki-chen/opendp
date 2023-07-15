@@ -145,9 +145,13 @@
 
 #![allow(clippy::just_underscores_and_digits)]
 #![allow(clippy::type_complexity)]
+#![cfg_attr(not(test), no_std)]
 #![cfg_attr(feature = "ffi", allow(clippy::upper_case_acronyms))]
 #![cfg_attr(feature = "ffi", allow(non_snake_case))]
 #![recursion_limit = "512"]
+#![feature(error_in_core)]
+
+extern crate alloc;
 
 // create clones of variables that are free to be consumed by a closure
 // Once we have things using `enclose!` that are outside of `contrib`, this should specify `feature="ffi"`.

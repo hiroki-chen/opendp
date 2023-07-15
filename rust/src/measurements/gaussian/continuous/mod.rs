@@ -1,4 +1,4 @@
-use num::Float as _;
+use num::traits::Float as _;
 use opendp_derive::bootstrap;
 
 use crate::{

@@ -25,11 +25,11 @@ mod ffi;
 #[cfg(feature = "ffi")]
 pub use ffi::*;
 
-use std::rc::Rc;
+use alloc::{boxed::Box, rc::Rc};
 
 use crate::error::*;
 use crate::traits::{DistanceConstant, InfCast, InfMul, TotalOrd};
-use std::fmt::Debug;
+use core::fmt::Debug;
 use num::Zero;
 
 /// A set which constrains the input or output of a [`Function`].

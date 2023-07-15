@@ -1,9 +1,7 @@
 //! Error handling utilities.
 
-use std::fmt;
-use std::fmt::Debug;
-
-use std::backtrace::Backtrace as _Backtrace;
+use alloc::string::String;
+use core::fmt::{self, Debug};
 
 /// Create an instance of [`Fallible`]
 #[macro_export]
@@ -19,26 +17,24 @@ macro_rules! err {
     ($variant:ident) => ($crate::error::Error {
         variant: $crate::error::ErrorVariant::$variant,
         message: None,
-        backtrace: err!(@backtrace)
     });
     // error with explicit message
     ($variant:ident, $message:expr) => ($crate::error::Error {
         variant: $crate::error::ErrorVariant::$variant,
-        message: Some($message.to_string()), // ToString is impl'ed for String
-        backtrace: err!(@backtrace)
+        message: Some(alloc::string::ToString::to_string(&$message)), // ToString is impl'ed for String
     });
     // args to format into message
     ($variant:ident, $template:expr, $($args:expr),+) =>
-        (err!($variant, format!($template, $($args,)+)));
+        (err!($variant, alloc::format!($template, $($args,)+)));
 
-    (@backtrace) => (std::backtrace::Backtrace::capture());
+    (@backtrace) => (panic!());
 }
 
-#[derive(thiserror::Error, Debug)]
+#[derive(Debug)]
 pub struct Error {
     pub variant: ErrorVariant,
     pub message: Option<String>,
-    pub backtrace: _Backtrace,
+    // pub backtrace: _Backtrace,
 }
 
 impl PartialEq for Error {
@@ -47,57 +43,32 @@ impl PartialEq for Error {
     }
 }
 
-#[derive(PartialEq, thiserror::Error, Debug)]
+#[derive(PartialEq, Debug)]
 #[non_exhaustive]
 pub enum ErrorVariant {
-    #[error("FFI")]
     FFI,
-
-    #[error("TypeParse")]
     TypeParse,
-
-    #[error("FailedFunction")]
     FailedFunction,
-
-    #[error("FailedMap")]
     FailedMap,
-
-    #[error("RelationDebug")]
     RelationDebug,
-
-    #[error("FailedCast")]
     FailedCast,
-
-    #[error("DomainMismatch")]
     DomainMismatch,
-
-    #[error("MetricMismatch")]
     MetricMismatch,
-
-    #[error("MeasureMismatch")]
     MeasureMismatch,
-
-    #[error("MakeDomain")]
     MakeDomain,
-
-    #[error("MakeTransformation")]
     MakeTransformation,
-
-    #[error("MakeMeasurement")]
     MakeMeasurement,
-
-    #[error("InvalidDistance")]
     InvalidDistance,
-
-    #[error("NotImplemented")]
     NotImplemented,
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.variant)
+        write!(f, "{:?}", self.variant)
     }
 }
+
+impl core::error::Error for Error {}
 
 // simplify error creation from vega_lite_4
 #[cfg(all(test, feature = "test-plot"))]
@@ -112,7 +83,6 @@ impl From<ErrorVariant> for Error {
         Self {
             variant,
             message: None,
-            backtrace: std::backtrace::Backtrace::capture(),
         }
     }
 }

@@ -11,10 +11,10 @@
 #[cfg(feature = "ffi")]
 mod ffi;
 
-use std::{
+use alloc::rc::Rc;
+use core::{
     fmt::{Debug, Formatter},
     marker::PhantomData,
-    rc::Rc,
 };
 
 use crate::{core::Measure, domains::type_name, error::Fallible};
@@ -52,7 +52,7 @@ impl<Q> PartialEq for MaxDivergence<Q> {
 }
 
 impl<Q> Debug for MaxDivergence<Q> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "MaxDivergence({})", type_name!(Q))
     }
 }
@@ -98,7 +98,7 @@ impl<Q> PartialEq for SmoothedMaxDivergence<Q> {
     }
 }
 impl<Q> Debug for SmoothedMaxDivergence<Q> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "SmoothedMaxDivergence({})", type_name!(Q))
     }
 }
@@ -165,7 +165,7 @@ impl<Q> PartialEq for FixedSmoothedMaxDivergence<Q> {
 }
 
 impl<Q> Debug for FixedSmoothedMaxDivergence<Q> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "FixedSmoothedMaxDivergence({})", type_name!(Q))
     }
 }
@@ -208,7 +208,7 @@ impl<Q> PartialEq for ZeroConcentratedDivergence<Q> {
 }
 
 impl<Q> Debug for ZeroConcentratedDivergence<Q> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "ZeroConcentratedDivergence({})", type_name!(Q))
     }
 }

@@ -1,4 +1,4 @@
-use std::{mem::size_of, ops::Sub};
+use core::{mem::size_of, ops::Sub};
 
 use crate::{
     error::Fallible,

@@ -1,9 +1,9 @@
 //! Traits that enable building stable and private algorithms.
 
 use crate::metrics::IntDistance;
+use core::hash::Hash;
+use core::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 use num::{One, Zero};
-use std::hash::Hash;
-use std::ops::{AddAssign, DivAssign, MulAssign, SubAssign};
 
 mod bounded;
 pub use bounded::*;
@@ -74,11 +74,11 @@ impl<TI, TO> DistanceConstant<TI> for TO where TO: 'static + InfCast<TI> + InfMu
 /// test_func(1i8);
 /// ```
 pub trait Primitive:
-    'static + Clone + std::fmt::Debug + CheckNull + PartialEq + Default + CheckAtom
+    'static + Clone + core::fmt::Debug + CheckNull + PartialEq + Default + CheckAtom
 {
 }
 impl<T> Primitive for T where
-    T: 'static + Clone + std::fmt::Debug + CheckNull + PartialEq + Default + CheckAtom
+    T: 'static + Clone + core::fmt::Debug + CheckNull + PartialEq + Default + CheckAtom
 {
 }
 
@@ -94,7 +94,7 @@ impl<T> Primitive for T where
 /// # Example
 /// ```
 /// use opendp::traits::Hashable;
-/// use std::collections::HashSet;
+/// use core::collections::HashSet;
 /// fn test_func<T: Hashable>(value: T) {
 ///     // can be debugged, as Hashable inherits all traits from Primitive
 ///     println!("{value:?}");
@@ -157,8 +157,8 @@ pub trait Number:
     + ExactIntCast<i32>
     + InfCast<IntDistance>
     + InfCast<usize>
-    + std::iter::Sum<Self>
-    + for<'a> std::iter::Sum<&'a Self>
+    + core::iter::Sum<Self>
+    + for<'a> core::iter::Sum<&'a Self>
     + DistanceConstant<Self>
 {
 }
@@ -186,8 +186,8 @@ impl<T> Number for T where
         + ExactIntCast<i32>
         + InfCast<IntDistance>
         + InfCast<usize>
-        + std::iter::Sum<Self>
-        + for<'a> std::iter::Sum<&'a Self>
+        + core::iter::Sum<Self>
+        + for<'a> core::iter::Sum<&'a Self>
         + DistanceConstant<Self>
 {
 }
@@ -206,7 +206,7 @@ impl<T> Number for T where
 /// # Example
 /// ```
 /// use opendp::traits::Integer;
-/// use std::collections::HashSet;
+/// use core::collections::HashSet;
 /// fn test_func<T: Integer>(value: T) {
 ///     // can be debugged
 ///     println!("{value:?}");
@@ -249,7 +249,7 @@ impl<T> Integer for T where T: Number + Hashable {}
 /// ```
 pub trait Float:
     Number
-    + num::Float
+    + num::traits::Float
     + InherentNull
     + InfLn
     + InfLn1P
@@ -265,7 +265,7 @@ pub trait Float:
 }
 impl<T> Float for T where
     T: Number
-        + num::Float
+        + num::traits::Float
         + InherentNull
         + InfLn
         + InfLn1P

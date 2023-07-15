@@ -13,16 +13,17 @@ mod ffi;
 
 // Once we have things using `Any` that are outside of `contrib`, this should specify `feature="ffi"`.
 #[cfg(feature = "contrib")]
-use std::any::Any;
-use std::collections::HashMap;
-use std::hash::Hash;
-use std::marker::PhantomData;
-use std::ops::Bound;
+use core::any::Any;
+use core::hash::Hash;
+use core::marker::PhantomData;
+use core::ops::Bound;
 
 use crate::core::Domain;
 use crate::error::Fallible;
 use crate::traits::{CheckAtom, InherentNull, TotalOrd};
-use std::fmt::{Debug, Formatter};
+use alloc::{format, string::ToString, vec::Vec};
+use core::fmt::{Debug, Formatter};
+use hashbrown::HashMap;
 
 #[cfg(feature = "contrib")]
 mod poly;
@@ -83,7 +84,7 @@ pub struct AtomDomain<T: CheckAtom> {
 }
 
 impl<T: CheckAtom> Debug for AtomDomain<T> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         let bounds = self
             .bounds
             .as_ref()
@@ -133,13 +134,13 @@ impl<T: CheckAtom + TotalOrd> AtomDomain<T> {
             nullable: false,
         })
     }
-    
+
     pub fn get_closed_bounds(&self) -> Option<(T, T)> {
         let bounds = self.bounds.as_ref()?;
 
         match (&bounds.lower, &bounds.upper) {
             (Bound::Included(l), Bound::Included(u)) => Some((l.clone(), u.clone())),
-            _ => None
+            _ => None,
         }
     }
 }
@@ -179,7 +180,7 @@ impl<T: InherentNull> Null<T> {
     }
 }
 impl<T> Debug for Null<T> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "Null({:?})", type_name!(T))
     }
 }
@@ -244,7 +245,7 @@ impl<T: Clone> Bounds<T> {
     }
 }
 impl<T: Debug> Debug for Bounds<T> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         let lower = match &self.lower {
             Bound::Included(v) => format!("[{:?}", v),
             Bound::Excluded(v) => format!("({:?}", v),
@@ -289,7 +290,7 @@ impl<T: Clone + TotalOrd> Bounds<T> {
 /// let domain = MapDomain::new(AtomDomain::default(), AtomDomain::default());
 ///
 /// use opendp::core::Domain;
-/// use std::collections::HashMap;
+/// use core::collections::HashMap;
 ///
 /// // create a hashmap we can test with
 /// let hashmap = HashMap::from_iter([("a", 23), ("b", 12)]);
@@ -384,7 +385,7 @@ pub struct VectorDomain<D: Domain> {
     pub size: Option<usize>,
 }
 impl<D: Domain> Debug for VectorDomain<D> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         let size_str = self
             .size
             .map(|size| format!(", size={:?}", size))
@@ -468,7 +469,7 @@ impl<D: Domain> OptionDomain<D> {
     }
 }
 impl<D: Domain> Debug for OptionDomain<D> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), core::fmt::Error> {
         write!(f, "OptionDomain({:?})", self.element_domain)
     }
 }
@@ -485,7 +486,7 @@ impl<D: Domain> Domain for OptionDomain<D> {
 /// retrieves the type_name for a given type
 macro_rules! type_name {
     ($ty:ty) => {
-        std::any::type_name::<$ty>()
+        core::any::type_name::<$ty>()
             .split("::")
             .last()
             .unwrap_or("")

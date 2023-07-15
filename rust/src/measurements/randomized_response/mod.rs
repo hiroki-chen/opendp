@@ -167,7 +167,7 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
-    use num::Float as _;
+    use num::traits::Float as _;
     use std::iter::FromIterator;
 
     #[test]
